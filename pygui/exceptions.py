@@ -1,5 +1,5 @@
-class NoWindowFound(Exception):
+class WindowNotFound(Exception):
     pass
 
-class NoCompontentFound(Exception):
+class ComponentNotFound(Exception):
     pass
