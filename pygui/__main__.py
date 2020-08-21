@@ -24,7 +24,7 @@ class PyGui:
     def set_variables(self, xml_str, **kwargs):
         """ searches for places with {{ a tag }} like that to replace that with the variable as named inside """
 
-        for var in self.vars:
+        for var in kwargs:
             findable_ways = [
                 "{{" + f" {var} " + "}}",
                 "{{" + f"{var}" + "}}",
