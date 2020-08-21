@@ -1,4 +1,4 @@
-from tkinter import Tk, Frame, Label, Button, Image
+from .window import Window
 from xmlparser import XMLParser
 from jinja2 import Environment, PackageLoader, select_autoescape
 import os
@@ -8,6 +8,7 @@ class PyGui:
     def __init__(self):
         self.parser = XMLParser.XMLParser()
         self.showing_window_vars = None
+        self.window = None
 
         # Jinja2 enviroment
         self.env = Environment(
@@ -24,7 +25,9 @@ class PyGui:
         window_xml = self.parser.loads(window_xml_str)
         self.construct(window_xml)
 
-        window_xml.print_out()
+        self.window = Window(window_xml)
+        self.window.construct()
+        self.window.mainloop()
 
     def construct(self, xml_obj):
         """ Construct the window """
@@ -49,4 +52,9 @@ class PyGui:
         template = self.env.get_template(f'components/{tag.name[1:]}.xml')
         xml_str = template.render(**attrs)
         new_tag = self.parser.loads(xml_str)
+
+        for grid_str in ['row', 'column', 'columnspan', 'rowspan']:
+            if grid_str in tag.attrs:
+                new_tag.attrs[grid_str] = tag.attrs[grid_str]
+
         return new_tag
