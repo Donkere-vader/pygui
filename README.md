@@ -1,6 +1,11 @@
 # PyGui
 A module based on Tkinter that shows windows constructed from xml
 
+## Disclaimer
+This is a very simple module. If you need very fine control or very special functions of tkinter this module will probably not work for you.
+
+If you really like what I made (which i obviously hope) and you really want a certain function. Either request it or make it urself and make a pull request.
+
 ## Requirements
 this script requires the XMLParser I also wrote.
 
