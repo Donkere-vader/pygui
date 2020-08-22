@@ -5,14 +5,14 @@ import os
 
 
 class PyGui:
-    def __init__(self):
+    def __init__(self, app_name):
         self.parser = XMLParser()
         self.showing_window_vars = None
         self.window = None
 
         # Jinja2 enviroment
         self.env = Environment(
-            loader=PackageLoader('pygui', 'templates/'),
+            loader=PackageLoader(app_name, "/templates/"),
             autoescape=select_autoescape(['xml'])
         )
 

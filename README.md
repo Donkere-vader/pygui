@@ -84,7 +84,7 @@ this script would show the window *templates/windows/main.xml*
 ```py
 from pygui import PyGui
 
-pygui = PyGui()
+pygui = PyGui(__name__)
 
 pygui.show('main')
 ```
