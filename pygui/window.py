@@ -33,9 +33,12 @@ class Window(Tk):
         if tag.name == 'root':
             if 'title' in tag.attrs:
                 self.title(tag.attrs['title'])
+                del tag.attrs['title']
             if 'geometry' in tag.attrs:
                 self.geometry(tag.attrs['geometry'])
+                del tag.attrs['geometry']
             new_obj = self
+            self.configure(**tag.attrs)
         elif tag.name == 'frame':
             new_obj = Frame(master=self.working_masters[-1], **tag.attrs)
         elif tag.name == 'label':
