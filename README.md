@@ -86,10 +86,11 @@ from pygui import PyGui
 
 pygui = PyGui(__name__)
 
-pygui.show('main')
+window = pygui.construct('main')
+window.show()
 ```
 
 To pass variables or functions or classes into the jinja2 templating for usage in the template simply do:
 ```py
-pygui.show('main', custom_var='this will be displayed in the template')
+window = pygui.construct('main', custom_var='this will be displayed in the template')
 ```
