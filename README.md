@@ -4,7 +4,7 @@ A module based on Tkinter that shows windows constructed from xml
 ## Disclaimer
 This is a very simple module. If you need very fine control or very special functions of tkinter this module will probably not work for you.
 
-If you really like what I made (which i obviously hope) and you really want a certain function. Either request it or make it urself and make a pull request.
+If you really like what I made (which i obviously hope) and you really want a certain function. Either request it or make it yourself and make a pull request.
 
 ## Requirements
 this script requires the XMLParser I also wrote.
@@ -17,7 +17,7 @@ It also uses the jinja2 template module so if you've used Flask this should be v
 ## Usage
 
 ### Project structure
-Create a *templates* folder in the run enviroment.
+Create a *templates* folder in the run environment.
 The *templates* folder should contain a *windows* and a *components* folder. like so:
 ```
 templates/
@@ -28,13 +28,13 @@ templates/
 ```
 
 ### How to template
-templating is done in XML (vert simmiliar to HTML).
+Templating is done in XML (vert similar to HTML).
 every tkinter object is a tag.
 for example a tkinter label would be defined like so:  
-``<label font="arial 20">label tekst</labels>``  
+``<label font="arial 20">label text</labels>``  
 
 and the font="arial 20" is one of the kwargs of the tkinter.Label object.
-Every kwargs of an object should work if you include it like an attribute such as font in the example. Except for the text attribute in the case of Labels and Buttons. Those can be inserted as a child of the Label (as also vissible in the example above)
+Every kwargs of an object should work if you include it like an attribute such as font in the example. Except for the text attribute in the case of Labels and Buttons. Those can be inserted as a child of the Label (as also visible in the example above)
 
 And all the templating stuff from jinja2 effects the templating as well. To learn more about that view the jinja2 documentation.
 [jinja2 documentation](https://jinja.palletsprojects.com/en/2.11.x/)
@@ -75,7 +75,7 @@ An example component could be:
 ```
 
 ### Python
-So now we get to acctually creating the windows.
+So now we get to actually creating the windows.
 
 this script would show the window *templates/windows/main.xml*
 ```py
