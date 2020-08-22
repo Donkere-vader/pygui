@@ -1,4 +1,5 @@
 from tkinter import Tk, Frame, Label, Button
+from PIL import Image, ImageTk
 from .entry import Entry
 
 class Window(Tk):
@@ -60,6 +61,35 @@ class Window(Tk):
             if tag.content is not None:
                 new_obj.val(tag.content)
             self.entries[entry_id] = new_obj
+        elif tag.name in ['image', 'img']:
+            src = None
+            for possible_attr in ['image', 'img', 'src']:
+                if possible_attr in tag.attrs:
+                    src = tag.attrs[possible_attr]
+                    break
+
+            load = Image.open(src)
+            cur_width, cur_height = load.size
+
+            width = height = None
+            if 'size' in tag.attrs:
+                width = tag.attrs['size'].split('x')[0]
+                height = tag.attrs['size'].split('x')[1]
+
+            if 'width' in tag.attrs:
+                width = tag.attrs['width']
+                if 'height' not in tag.attrs:
+                    height = cur_height * (width / cur_width)
+            if 'height' in tag.attrs:
+                height = tag.attrs['height']
+                if 'width' not in tag.attrs:
+                    width = cur_width * (height / cur_height)
+
+            load = load.resize((int(width), int(height)), Image.ANTIALIAS)
+
+            render = ImageTk.PhotoImage(load)
+            new_obj = Label(self, image=render)
+            new_obj.image = render
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
