@@ -94,3 +94,17 @@ To pass variables or functions or classes into the jinja2 templating for usage i
 ```py
 window = pygui.construct('main', custom_var='this will be displayed in the template')
 ```
+
+### images
+U can use images as follows:
+
+```py
+<image image="images/test.jpg" height="200" />
+```
+
+when using the height or width attribute the aspect ratio will stay the same
+
+u can also use the size attribute (or width and height attributes) to force a aspect ratio change
+
+``size="200x200"`` This would force the image to be 200x200
+(WIDTHxHEIGHT)
