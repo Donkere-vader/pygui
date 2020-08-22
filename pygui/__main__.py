@@ -1,12 +1,12 @@
 from .window import Window
-from xmlparser import XMLParser
+from XMLParser import XMLParser
 from jinja2 import Environment, PackageLoader, select_autoescape
 import os
 
 
 class PyGui:
     def __init__(self):
-        self.parser = XMLParser.XMLParser()
+        self.parser = XMLParser()
         self.showing_window_vars = None
         self.window = None
 
