@@ -1,4 +1,5 @@
 from tkinter import Tk, Frame, Label, Button
+from .entry import Entry
 
 class Window(Tk):
     def __init__(self, xml, showing_window_vars):
@@ -6,6 +7,10 @@ class Window(Tk):
         self.xml = xml
         self.working_masters = []
         self.showing_window_vars = showing_window_vars
+        self.entries = {}
+
+    def show(self):
+        self.mainloop()
 
     def construct(self):
         self._loop_tag(self.xml)
@@ -47,6 +52,14 @@ class Window(Tk):
             if 'command' in tag.attrs:
                 tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, self.showing_window_vars)
             new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+        elif tag.name == 'entry':
+            if 'id' in tag.attrs:
+                entry_id = tag.attrs['id']
+                del tag.attrs['id']
+            new_obj = Entry(master=self.working_masters[-1], **tag.attrs)
+            if tag.content is not None:
+                new_obj.val(tag.content)
+            self.entries[entry_id] = new_obj
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)

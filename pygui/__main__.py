@@ -8,7 +8,6 @@ class PyGui:
     def __init__(self, app_name):
         self.parser = XMLParser()
         self.showing_window_vars = None
-        self.window = None
 
         # Jinja2 enviroment
         self.env = Environment(
@@ -16,20 +15,20 @@ class PyGui:
             autoescape=select_autoescape(['xml'])
         )
 
-    def show(self, _window, **kwargs):
+    def construct(self, _window, **kwargs):
         """ Show a specific window """
         self.showing_window_vars = kwargs
 
         template = self.env.get_template(f'windows/{_window}.xml')
         window_xml_str = template.render(self.showing_window_vars)
         window_xml = self.parser.loads(window_xml_str)
-        self.construct(window_xml)
+        self._construct(window_xml)
 
-        self.window = Window(window_xml, self.showing_window_vars)
-        self.window.construct()
-        self.window.mainloop()
+        window = Window(window_xml, self.showing_window_vars)
+        window.construct()
+        return window
 
-    def construct(self, xml_obj):
+    def _construct(self, xml_obj):
         """ Construct the window """
         self._loop_tag(xml_obj)
 
