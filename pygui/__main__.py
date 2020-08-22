@@ -21,11 +21,11 @@ class PyGui:
         self.showing_window_vars = kwargs
 
         template = self.env.get_template(f'windows/{_window}.xml')
-        window_xml_str = template.render(variable="test1234")
+        window_xml_str = template.render(self.showing_window_vars)
         window_xml = self.parser.loads(window_xml_str)
         self.construct(window_xml)
 
-        self.window = Window(window_xml)
+        self.window = Window(window_xml, self.showing_window_vars)
         self.window.construct()
         self.window.mainloop()
 

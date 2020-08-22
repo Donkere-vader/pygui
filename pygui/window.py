@@ -1,10 +1,11 @@
 from tkinter import Tk, Frame, Label, Button
 
 class Window(Tk):
-    def __init__(self, xml):
+    def __init__(self, xml, showing_window_vars):
         super().__init__()
         self.xml = xml
         self.working_masters = []
+        self.showing_window_vars = showing_window_vars
 
     def construct(self):
         self._loop_tag(self.xml)
@@ -40,7 +41,9 @@ class Window(Tk):
         elif tag.name == 'label':
             new_obj = Label(master=self.working_masters[-1], text=tag.content, **tag.attrs)
         elif tag.name == 'button':
-            new_obj = Button(master=self.working_masters[-1], **tag.attrs)
+            if 'command' in tag.attrs:
+                tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, self.showing_window_vars)
+            new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
