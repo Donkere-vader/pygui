@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label, Button
 from PIL import Image, ImageTk
-from .entry import Entry
+from .custom_tk import Entry, Text
 
 class Window(Tk):
     def __init__(self, xml, showing_window_vars):
@@ -53,14 +53,22 @@ class Window(Tk):
             if 'command' in tag.attrs:
                 tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, self.showing_window_vars)
             new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
-        elif tag.name == 'entry':
+        elif tag.name in ['entry', 'text']:
+            entry_id = None
             if 'id' in tag.attrs:
                 entry_id = tag.attrs['id']
                 del tag.attrs['id']
-            new_obj = Entry(master=self.working_masters[-1], **tag.attrs)
+
+            if tag.name == 'entry':
+                new_obj = Entry(master=self.working_masters[-1], **tag.attrs)
+            else:
+                new_obj = Text(master=self.working_masters[-1], **tag.attrs)
+
             if tag.content is not None:
                 new_obj.val(tag.content)
-            self.entries[entry_id] = new_obj
+
+            if entry_id is not None:
+                self.entries[entry_id] = new_obj
         elif tag.name in ['image', 'img']:
             src = None
             for possible_attr in ['image', 'img', 'src']:
@@ -88,7 +96,7 @@ class Window(Tk):
             load = load.resize((int(width), int(height)), Image.ANTIALIAS)
 
             render = ImageTk.PhotoImage(load)
-            new_obj = Label(self, image=render)
+            new_obj = Label(self.working_masters[-1], image=render)
             new_obj.image = render
 
         if new_obj is not None and tag.name != 'root':
