@@ -111,3 +111,26 @@ u can also use the size attribute (or width and height attributes) to force a as
 
 ``size="200x200"`` This would force the image to be 200x200
 (WIDTHxHEIGHT)
+
+### Input
+You can get input in a one-line entry or a multiline text widget.
+
+```xml
+<entry id="entry">
+    Placeholder text goes here
+</entry>
+<text id="text">
+    Placeholder text for text widget
+</text>
+```
+
+Getting and setting of the values is inspired by jQuery.
+You get values from a entry by calling the ``.val()`` function on an entry or text widget. And settings is done with ``.val('new value')``  
+
+all the entry and text widgets are located in the dict PyGui.entries.
+
+So for example getting the value from the entry above would look like so:
+
+```py
+entry_value = PyGui.entries['entry'].val()
+```
