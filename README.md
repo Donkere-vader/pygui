@@ -7,7 +7,10 @@ This is a very simple module. If you need very fine control or very special func
 If you really like what I made (which i obviously hope) and you really want a certain function. Either request it or make it yourself and make a pull request.
 
 ## Installation
-Move the XMLParser file into the folder with your python modules
+Install my xmlparser from [the repo](https://www.github.com/donkere-vader/xmlparser#installation)
+
+Then move the pygui folder into ur modules folder
+(on linux this would result in: ``/usr/lib/python3.8/pygui``)
 
 ## Requirements
 this script requires the XMLParser I also wrote.
