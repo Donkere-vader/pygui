@@ -8,7 +8,12 @@ class Window(Tk):
         self.xml = xml
         self.working_masters = []
         self.showing_window_vars = showing_window_vars
-        self.entries = {}
+        self.items = {}
+
+    def get_item(self, id):
+        if id in self.items:
+            return self.items[id]
+        return None
 
     def show(self):
         self.mainloop()
@@ -36,6 +41,11 @@ class Window(Tk):
         for item in to_remove:
             del tag.attrs[item]
 
+        item_id = None
+        if 'id' in tag.attrs:
+            item_id = tag.attrs['id']
+            del tag.attrs['id']
+
         if tag.name == 'root':
             if 'title' in tag.attrs:
                 self.title(tag.attrs['title'])
@@ -54,11 +64,6 @@ class Window(Tk):
                 tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, self.showing_window_vars)
             new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
         elif tag.name in ['entry', 'text']:
-            entry_id = None
-            if 'id' in tag.attrs:
-                entry_id = tag.attrs['id']
-                del tag.attrs['id']
-
             if tag.name == 'entry':
                 new_obj = Entry(master=self.working_masters[-1], **tag.attrs)
             else:
@@ -66,9 +71,6 @@ class Window(Tk):
 
             if tag.content is not None:
                 new_obj.val(tag.content)
-
-            if entry_id is not None:
-                self.entries[entry_id] = new_obj
         elif tag.name in ['image', 'img']:
             src = None
             for possible_attr in ['image', 'img', 'src']:
@@ -103,6 +105,9 @@ class Window(Tk):
             new_obj.grid(**grid)
 
         self.working_masters.append(new_obj)
+
+        if item_id is not None:
+            self.items[item_id] = new_obj
 
         for child in tag.children:
             self._loop_tag(child)

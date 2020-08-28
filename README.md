@@ -127,10 +127,10 @@ You can get input in a one-line entry or a multiline text widget.
 Getting and setting of the values is inspired by jQuery.
 You get values from a entry by calling the ``.val()`` function on an entry or text widget. And settings is done with ``.val('new value')``  
 
-all the entry and text widgets are located in the dict PyGui.entries.
+All items are located in the window.items dictionary.
 
 So for example getting the value from the entry above would look like so:
 
 ```py
-entry_value = PyGui.entries['entry'].val()
+entry_value = window.get_item("entry").val()
 ```
