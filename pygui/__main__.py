@@ -12,12 +12,17 @@ class PyGui:
         """ Construct the PyGui class """
         self.parser = XMLParser()
         self.showing_window_vars = None
+        self.globals = {}  # dict for the templating globals
 
         # Jinja2 enviroment
         self.env = Environment(
             loader=PackageLoader(app_name, "/templates/"),
             autoescape=select_autoescape(['xml'])
         )
+
+    def set_globals(self, **kwargs):
+        for item in kwargs:
+            self.globals[item] = kwargs[item]
 
     def construct(self, _window, **kwargs):
         """ Show a specific window """
@@ -28,7 +33,7 @@ class PyGui:
         window_xml = self.parser.loads(window_xml_str)
         self._construct(window_xml)
 
-        window = Window(window_xml, self.showing_window_vars)
+        window = Window(self, window_xml, self.showing_window_vars)
         window.construct()
         return window
 

@@ -3,9 +3,10 @@ from PIL import Image, ImageTk
 from .custom_tk import Entry, Text
 
 class Window(Tk):
-    def __init__(self, xml, showing_window_vars):
+    def __init__(self, parent, xml, showing_window_vars):
         """ Initialize the window """
         super().__init__()
+        self.parent = parent
         self.xml = xml
         self.working_masters = []
         self.showing_window_vars = showing_window_vars
@@ -66,7 +67,7 @@ class Window(Tk):
             new_obj = Label(master=self.working_masters[-1], text=tag.content, **tag.attrs)
         elif tag.name == 'button':
             if 'command' in tag.attrs:
-                tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, self.showing_window_vars)
+                tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
             new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
         elif tag.name in ['entry', 'text']:
             if tag.name == 'entry':
