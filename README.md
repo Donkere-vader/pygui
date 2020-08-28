@@ -1,5 +1,5 @@
 # PyGui
-A module based on Tkinter that shows windows constructed from xml
+A module that generates Tkinter windows from XML with jinja2 templating.
 
 ## Disclaimer
 This is a very simple module. If you need very fine control or very special functions of tkinter this module will probably not work for you.
@@ -44,6 +44,17 @@ Every kwargs of an object should work if you include it like an attribute such a
 
 And all the templating stuff from jinja2 effects the templating as well. To learn more about that view the jinja2 documentation.
 [jinja2 documentation](https://jinja.palletsprojects.com/en/2.11.x/)
+
+#### Templating global variables
+If you want to set global variables for within the templating. If you are for example going to use a particullar function a lot you can make it a global variable like so:
+
+```py
+global_var = "I'm going to be used a lot"
+
+PyGui.set_globals(global_var=global_var)
+```
+
+Calling this function will not change anything about global variables set earlier. Only when you give them the same name, it will be overwritten.
 
 ### Make a window
 To make a new window create a .xml file in the *templates/windows/* folder.
