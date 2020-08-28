@@ -4,6 +4,7 @@ from .custom_tk import Entry, Text
 
 class Window(Tk):
     def __init__(self, xml, showing_window_vars):
+        """ Initialize the window """
         super().__init__()
         self.xml = xml
         self.working_masters = []
@@ -11,17 +12,21 @@ class Window(Tk):
         self.items = {}
 
     def get_item(self, id):
+        """ Get the TK widget if it has the id="" attribute in the XML """
         if id in self.items:
             return self.items[id]
         return None
 
     def show(self):
+        """ Show the current window """
         self.mainloop()
 
     def construct(self):
+        """ Construct the current window """
         self._loop_tag(self.xml)
 
     def _loop_tag(self, tag):
+        """ Loop over the XML tags and generate the tkinter objects """
         new_obj = None
 
         # get grid attrs

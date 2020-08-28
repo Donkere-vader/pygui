@@ -9,6 +9,7 @@ class PyGui:
     message = messagebox
 
     def __init__(self, app_name):
+        """ Construct the PyGui class """
         self.parser = XMLParser()
         self.showing_window_vars = None
 
