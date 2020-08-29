@@ -137,13 +137,14 @@ class Window(Tk):
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
 
-        self.working_masters.append(new_obj)
-
         if item_id is not None:
             self.items[item_id] = new_obj
 
-        if loop_children:
-            for child in tag.children:
-                self._loop_tag(child)
+        if not tag.self_closing:
+            self.working_masters.append(new_obj)
 
-        self.working_masters.remove(new_obj)
+            if loop_children:
+                for child in tag.children:
+                    self._loop_tag(child)
+
+            self.working_masters.remove(new_obj)
