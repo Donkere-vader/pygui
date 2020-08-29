@@ -2,6 +2,7 @@ from tkinter import Tk, Frame, Label, Button, Menu
 from PIL import Image, ImageTk
 from .custom_tk import Entry, Text, Checkbutton, Listbox, Spinbox
 
+
 class Window(Tk):
     def __init__(self, parent, xml, showing_window_vars):
         """ Initialize the window """
@@ -85,35 +86,37 @@ class Window(Tk):
                 del tag.attrs['geometry']
             new_obj = self
             self.configure(**tag.attrs)
+
         elif tag.name == 'frame':
             new_obj = Frame(master=self.working_masters[-1], **tag.attrs)
+
         elif tag.name == 'label':
             new_obj = Label(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+
         elif tag.name == 'button':
             new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+
         elif tag.name in ['entry', 'text']:
             if tag.name == 'entry':
                 new_obj = Entry(master=self.working_masters[-1], **tag.attrs)
             else:
                 new_obj = Text(master=self.working_masters[-1], **tag.attrs)
-
             if tag.content is not None:
                 new_obj.val(tag.content)
+
         elif tag.name in ['image', 'img']:
             src = None
             for possible_attr in ['image', 'img', 'src']:
                 if possible_attr in tag.attrs:
                     src = tag.attrs[possible_attr]
                     break
-
             load = Image.open(src)
             cur_width, cur_height = load.size
-
             width = height = None
+
             if 'size' in tag.attrs:
                 width = tag.attrs['size'].split('x')[0]
                 height = tag.attrs['size'].split('x')[1]
-
             if 'width' in tag.attrs:
                 width = tag.attrs['width']
                 if 'height' not in tag.attrs:
@@ -124,12 +127,13 @@ class Window(Tk):
                     width = cur_width * (height / cur_height)
 
             load = load.resize((int(width), int(height)), Image.ANTIALIAS)
-
             render = ImageTk.PhotoImage(load)
             new_obj = Label(self.working_masters[-1], image=render)
             new_obj.image = render
+
         elif tag.name == 'checkbutton':
             new_obj = Checkbutton(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+
         elif tag.name == 'listbox':
             new_obj = Listbox(master=self.working_masters[-1], **tag.attrs)
 
@@ -137,6 +141,7 @@ class Window(Tk):
                 if t.name == 'li':
                     new_obj.insert('end', t.content)
             loop_children = False
+
         elif tag.name == 'menu':
             menubar = Menu(self)
             for t in tag.children:
@@ -151,6 +156,7 @@ class Window(Tk):
 
             self.config(menu=menubar)
             loop_children = False
+
         elif tag.name == 'spinbox':
             new_obj = Spinbox(self.working_masters[-1], **tag.attrs)
 
