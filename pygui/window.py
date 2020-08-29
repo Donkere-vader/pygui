@@ -72,6 +72,7 @@ class Window(Tk):
 
     def construct_tag(self, tag):
         """ Construct a tag into a tkinter object """
+
         if 'command' in tag.attrs:
             tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
 
