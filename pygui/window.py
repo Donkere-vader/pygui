@@ -29,9 +29,6 @@ class Window(Tk):
 
     def _loop_tag(self, tag):
         """ Loop over the XML tags and let the tags be generated and place them on their masters grid """
-        new_obj = None
-        loop_children = True
-
         # get grid attrs
         grid = {
             "row": 0,
@@ -54,7 +51,7 @@ class Window(Tk):
             item_id = tag.attrs['id']
             del tag.attrs['id']
 
-        new_obj = self.construct_tag(tag)
+        new_obj, loop_children = self.construct_tag(tag)
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
@@ -73,6 +70,8 @@ class Window(Tk):
 
     def construct_tag(self, tag):
         """ Construct a tag into a tkinter object """
+        new_obj = None
+        loop_children = True
 
         if 'command' in tag.attrs:
             tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
@@ -160,4 +159,4 @@ class Window(Tk):
         elif tag.name == 'spinbox':
             new_obj = Spinbox(self.working_masters[-1], **tag.attrs)
 
-        return new_obj
+        return new_obj, loop_children
