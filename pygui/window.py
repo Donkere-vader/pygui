@@ -27,7 +27,7 @@ class Window(Tk):
         self._loop_tag(self.xml)
 
     def _loop_tag(self, tag):
-        """ Loop over the XML tags and generate the tkinter objects """
+        """ Loop over the XML tags and let the tags be generated and place them on their masters grid """
         new_obj = None
         loop_children = True
 
@@ -53,6 +53,25 @@ class Window(Tk):
             item_id = tag.attrs['id']
             del tag.attrs['id']
 
+        new_obj = self.construct_tag(tag)
+
+        if new_obj is not None and tag.name != 'root':
+            new_obj.grid(**grid)
+
+        if item_id is not None:
+            self.items[item_id] = new_obj
+
+        if not tag.self_closing:
+            self.working_masters.append(new_obj)
+
+            if loop_children:
+                for child in tag.children:
+                    self._loop_tag(child)
+
+            self.working_masters.remove(new_obj)
+
+    def construct_tag(self, tag):
+        """ Construct a tag into a tkinter object """
         if 'command' in tag.attrs:
             tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
 
@@ -134,17 +153,4 @@ class Window(Tk):
         elif tag.name == 'spinbox':
             new_obj = Spinbox(self.working_masters[-1], **tag.attrs)
 
-        if new_obj is not None and tag.name != 'root':
-            new_obj.grid(**grid)
-
-        if item_id is not None:
-            self.items[item_id] = new_obj
-
-        if not tag.self_closing:
-            self.working_masters.append(new_obj)
-
-            if loop_children:
-                for child in tag.children:
-                    self._loop_tag(child)
-
-            self.working_masters.remove(new_obj)
+        return new_obj
