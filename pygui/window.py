@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label, Button, Menu
 from PIL import Image, ImageTk
-from .custom_tk import Entry, Text, Checkbutton, Listbox
+from .custom_tk import Entry, Text, Checkbutton, Listbox, Spinbox
 
 class Window(Tk):
     def __init__(self, parent, xml, showing_window_vars):
@@ -131,6 +131,8 @@ class Window(Tk):
 
             self.config(menu=menubar)
             loop_children = False
+        elif tag.name == 'spinbox':
+            new_obj = Spinbox(self.working_masters[-1], **tag.attrs)
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)

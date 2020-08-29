@@ -1,4 +1,4 @@
-from tkinter import Entry, END, Text, Listbox
+from tkinter import Entry, END, Text, Listbox, Spinbox
 from tkinter import ttk
 
 class Entry(Entry):
@@ -47,3 +47,11 @@ class Listbox(Listbox):
             self.delete(0, END)
             for val in values:
                 self.insert(END, val)
+
+class Spinbox(Spinbox):
+    def val(self, value=None):
+        if value is not None:
+            self.delete(0, END)
+            self.insert(0, value)
+        else:
+            return self.get()
