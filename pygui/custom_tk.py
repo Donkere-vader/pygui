@@ -1,4 +1,5 @@
 from tkinter import Entry, END, Text
+from tkinter import ttk
 
 class Entry(Entry):
     """ Custom Entry obj with the added .val() for ease of use """
@@ -17,3 +18,17 @@ class Text(Text):
         else:
             self.delete("1.0", END)
             self.insert("1.0", value)
+
+class Checkbutton(ttk.Checkbutton):
+    def val(self, value=None):
+        if value is True:
+            self.select()
+            return
+        elif value is False:
+            self.deselect()
+            return
+        state = self.state()
+        if 'selected' in state:
+            return True
+        else:
+            return False

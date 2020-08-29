@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label, Button
 from PIL import Image, ImageTk
-from .custom_tk import Entry, Text
+from .custom_tk import Entry, Text, Checkbutton
 
 class Window(Tk):
     def __init__(self, parent, xml, showing_window_vars):
@@ -106,6 +106,8 @@ class Window(Tk):
             render = ImageTk.PhotoImage(load)
             new_obj = Label(self.working_masters[-1], image=render)
             new_obj.image = render
+        elif tag.name == 'checkbutton':
+            new_obj = Checkbutton(master=self.working_masters[-1], text=tag.content, **tag.attrs)
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
