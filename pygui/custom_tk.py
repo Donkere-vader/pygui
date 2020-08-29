@@ -1,4 +1,4 @@
-from tkinter import Entry, END, Text
+from tkinter import Entry, END, Text, Listbox
 from tkinter import ttk
 
 class Entry(Entry):
@@ -32,3 +32,18 @@ class Checkbutton(ttk.Checkbutton):
             return True
         else:
             return False
+
+class Listbox(Listbox):
+    def val(self, values=[]):
+        if len(values) == 0:
+            selected_items = []
+            _items = self.get(0, END)
+
+            for num in self.curselection():
+                selected_items.append(_items[num])
+
+            return selected_items
+        else:
+            self.delete(0, END)
+            for val in values:
+                self.insert(END, val)

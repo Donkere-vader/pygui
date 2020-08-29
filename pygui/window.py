@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label, Button
 from PIL import Image, ImageTk
-from .custom_tk import Entry, Text, Checkbutton
+from .custom_tk import Entry, Text, Checkbutton, Listbox
 
 class Window(Tk):
     def __init__(self, parent, xml, showing_window_vars):
@@ -108,6 +108,12 @@ class Window(Tk):
             new_obj.image = render
         elif tag.name == 'checkbutton':
             new_obj = Checkbutton(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+        elif tag.name == 'listbox':
+            new_obj = Listbox(master=self.working_masters[-1], **tag.attrs)
+
+            for t in tag.children:
+                if t.name == 'li':
+                    new_obj.insert('end', t.content)
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
