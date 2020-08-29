@@ -37,12 +37,14 @@ templates/
 Templating is done in XML (vert similar to HTML).
 every tkinter object is a tag.
 for example a tkinter label would be defined like so:  
-``<label font="arial 20">label text</labels>``  
+```xml
+<label font="arial 20">label text</labels>
+```  
 
 and the font="arial 20" is one of the kwargs of the tkinter.Label object.
 Every kwargs of an object should work if you include it like an attribute such as font in the example. Except for the text attribute in the case of Labels and Buttons. Those can be inserted as a child of the Label (as also visible in the example above)
 
-And all the templating stuff from jinja2 effects the templating as well. To learn more about that view the jinja2 documentation.
+And all the templating stuff from jinja2 effects the templating as well. To learn more about that view the jinja2 documentation:
 [jinja2 documentation](https://jinja.palletsprojects.com/en/2.11.x/)
 
 #### Templating global variables
@@ -145,3 +147,22 @@ So for example getting the value from the entry above would look like so:
 ```py
 entry_value = window.get_item("entry").val()
 ```
+
+Spinbox should also work
+
+### Menu
+A program menu (with the 'File' and 'Edit' options for example) is also possible with tkinter and this module.
+
+```xml
+<root title="Test window" bg="grey22">
+    <menu>
+        <menu>
+            File
+            <command command="print('opening file...')">open</command>
+        </menu>
+    </menu>
+</root>
+```
+
+Result:  
+![The menu in action](https://github.com/donkere-vader/pygui/blob/master/github/images/menu_example.png?raw=true)
