@@ -1,4 +1,4 @@
-from tkinter import Tk, Frame, Label, Button
+from tkinter import Tk, Frame, Label, Button, Menu
 from PIL import Image, ImageTk
 from .custom_tk import Entry, Text, Checkbutton, Listbox
 
@@ -29,6 +29,7 @@ class Window(Tk):
     def _loop_tag(self, tag):
         """ Loop over the XML tags and generate the tkinter objects """
         new_obj = None
+        loop_children = True
 
         # get grid attrs
         grid = {
@@ -52,6 +53,9 @@ class Window(Tk):
             item_id = tag.attrs['id']
             del tag.attrs['id']
 
+        if 'command' in tag.attrs:
+            tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
+
         if tag.name == 'root':
             if 'title' in tag.attrs:
                 self.title(tag.attrs['title'])
@@ -66,8 +70,6 @@ class Window(Tk):
         elif tag.name == 'label':
             new_obj = Label(master=self.working_masters[-1], text=tag.content, **tag.attrs)
         elif tag.name == 'button':
-            if 'command' in tag.attrs:
-                tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
             new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
         elif tag.name in ['entry', 'text']:
             if tag.name == 'entry':
@@ -114,6 +116,21 @@ class Window(Tk):
             for t in tag.children:
                 if t.name == 'li':
                     new_obj.insert('end', t.content)
+            loop_children = False
+        elif tag.name == 'menu':
+            menubar = Menu(self)
+            for t in tag.children:
+                if t.name == 'menu':
+                    new_sub_menu = Menu(menubar, tearoff=0)
+                    for _t in t.children:
+                        if _t.name == 'command':
+                            new_sub_menu.add_command(label=_t.content, command=lambda cmd=_t.attrs['command']: exec(cmd))
+                        if _t.name == 'seperator':
+                            new_sub_menu.add_separator()
+                    menubar.add_cascade(label=t.content, menu=new_sub_menu)
+
+            self.config(menu=menubar)
+            loop_children = False
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
@@ -123,7 +140,8 @@ class Window(Tk):
         if item_id is not None:
             self.items[item_id] = new_obj
 
-        for child in tag.children:
-            self._loop_tag(child)
+        if loop_children:
+            for child in tag.children:
+                self._loop_tag(child)
 
         self.working_masters.remove(new_obj)
