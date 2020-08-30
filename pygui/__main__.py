@@ -1,7 +1,7 @@
 from .window import Window
 from XMLParser import XMLParser
 from jinja2 import Environment, PackageLoader, select_autoescape
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 import os
 
 
@@ -66,3 +66,6 @@ class PyGui:
                 new_tag.attrs[grid_str] = tag.attrs[grid_str]
 
         return new_tag
+
+    def getfile(self, **kwargs):
+        return filedialog.askopenfilename(**kwargs)
