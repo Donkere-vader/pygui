@@ -75,6 +75,8 @@ class Window(Tk):
 
         if 'command' in tag.attrs:
             tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
+        if 'image' in tag.attrs:
+            tag.attrs['image'] = ImageTk.PhotoImage(Image.open(tag.attrs['image']))
 
         if tag.name == 'root':
             if 'title' in tag.attrs:
