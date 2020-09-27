@@ -23,6 +23,11 @@ class Window(Tk):
         """ Show the current window """
         self.mainloop()
 
+    def replace(self, new_window):
+        new_window.geometry(f"+{self.winfo_x()}+{self.winfo_y()}")
+        self.destroy()
+        new_window.show()
+
     def construct(self):
         """ Construct the current window """
         self._loop_tag(self.xml)
