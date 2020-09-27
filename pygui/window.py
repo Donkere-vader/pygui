@@ -74,7 +74,7 @@ class Window(Tk):
         loop_children = True
 
         if 'command' in tag.attrs:
-            tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals})
+            tag.attrs['command'] = lambda cmd=tag.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.env.globals})
         if 'image' in tag.attrs:
             tag.attrs['image'] = ImageTk.PhotoImage(Image.open(tag.attrs['image']))
 
@@ -150,7 +150,7 @@ class Window(Tk):
                     new_sub_menu = Menu(menubar, tearoff=0)
                     for _t in t.children:
                         if _t.name == 'command':
-                            new_sub_menu.add_command(label=_t.content, command=lambda cmd=_t.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.globals}))
+                            new_sub_menu.add_command(label=_t.content, command=lambda cmd=_t.attrs['command']: exec(cmd, {**self.showing_window_vars, **self.parent.env.globals}))
                         if _t.name == 'seperator':
                             new_sub_menu.add_separator()
                     menubar.add_cascade(label=t.content, menu=new_sub_menu)
