@@ -1,6 +1,7 @@
 from tkinter import Tk, Frame, Label, Button, Menu
 from PIL import Image, ImageTk
 from .custom_tk import Entry, Text, Checkbutton, Listbox, Spinbox
+import json
 
 
 class Window(Tk):
@@ -12,6 +13,8 @@ class Window(Tk):
         self.working_masters = []
         self.showing_window_vars = showing_window_vars
         self.items = {}
+
+        self.style_sheet = self.get_style_sheet()
 
     def get_item(self, id):
         """ Get the TK widget if it has the id="" attribute in the XML """
@@ -28,12 +31,29 @@ class Window(Tk):
         self.destroy()
         new_window.show()
 
+    def get_style_sheet(self):
+        if 'style' in self.xml.attrs:
+            file_name = self.xml.attrs["style"]
+            del self.xml.attrs['style']
+            return json.load(open(f'static/{file_name}.json'))
+
     def construct(self):
         """ Construct the current window """
         self._loop_tag(self.xml)
 
     def _loop_tag(self, tag):
         """ Loop over the XML tags and let the tags be generated and place them on their masters grid """
+        # set style sheet attrs
+        if 'class' in tag.attrs:
+            class_name = tag.attrs['class']
+            del tag.attrs['class']
+            tag.attrs = {**tag.attrs, **self.style_sheet[f".{class_name}"]}
+
+        if 'id' in tag.attrs:
+            id_name = tag.attrs['id']
+            del tag.attrs['id']
+            tag.attrs = {**tag.attrs, **self.style_sheet[f"#{id_name}"]}
+
         # get grid attrs
         grid = {
             "row": 0,
