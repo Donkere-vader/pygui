@@ -1,6 +1,7 @@
 from tkinter import Entry, END, Text, Listbox, Spinbox
 from tkinter import ttk
 
+
 class Entry(Entry):
     """ Custom Entry obj with the added .val() for ease of use """
     def val(self, value=None):
@@ -10,6 +11,7 @@ class Entry(Entry):
             self.delete(0, END)
             self.insert(0, value)
 
+
 class Text(Text):
     """ Custome Text obj wit the added .val() for ease of use """
     def val(self, value=None):
@@ -18,6 +20,7 @@ class Text(Text):
         else:
             self.delete("1.0", END)
             self.insert("1.0", value)
+
 
 class Checkbutton(ttk.Checkbutton):
     def val(self, value=None):
@@ -33,6 +36,7 @@ class Checkbutton(ttk.Checkbutton):
         else:
             return False
 
+
 class Listbox(Listbox):
     def val(self, values=[]):
         if len(values) == 0:
@@ -47,6 +51,7 @@ class Listbox(Listbox):
             self.delete(0, END)
             for val in values:
                 self.insert(END, val)
+
 
 class Spinbox(Spinbox):
     def val(self, value=None):
