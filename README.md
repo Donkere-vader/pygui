@@ -26,6 +26,8 @@ It also uses the jinja2 template module so if you've used Flask this should be v
 Create a *templates* folder in the run environment.
 The *templates* folder should contain a *windows* and a *components* folder. like so:
 ```
+static/
+    # here go the style sheets
 templates/
     components/
         # here go the component .xml files
@@ -166,3 +168,27 @@ A program menu (with the 'File' and 'Edit' options for example) is also possible
 
 Result:  
 ![The menu in action](https://github.com/donkere-vader/pygui/blob/master/github/images/menu_example.png?raw=true)
+
+### Style sheets
+You can make a stylesheet like this:
+```json
+{
+    ".button": {
+        "bg": "red"
+    },
+    "#fuck": {
+        "fg": "orange"
+    }
+}
+```
+And you need to place it in a static/ folder in the project root.
+
+Then in the xml file you can specify the style sheet in the root tag like so:
+```xml
+<root title="window title" style="style_sheet_name">
+    <frame>
+        <button id="fuck" command="print(1)" width="10" height="10" class="button">test</button>
+    </frame>
+</root>
+```
+You can add classes and id's to the tags to give them the styling. See the xml and json example above. They go together.
