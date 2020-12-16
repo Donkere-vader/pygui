@@ -50,9 +50,8 @@ class Window(Tk):
             tag.attrs = {**tag.attrs, **self.style_sheet[f".{class_name}"]}
 
         if 'id' in tag.attrs and self.style_sheet is not None:
-            id_name = tag.attrs['id']
-            del tag.attrs['id']
-            tag.attrs = {**tag.attrs, **self.style_sheet[f"#{id_name}"]}
+            if f"#{tag.attrs['id']}" in self.style_sheet:
+                tag.attrs = {**tag.attrs, **self.style_sheet[f"#{tag.attrs['id']}"]}
 
         # get grid attrs
         grid = {
@@ -76,7 +75,10 @@ class Window(Tk):
             item_id = tag.attrs['id']
             del tag.attrs['id']
 
-        new_obj, loop_children = self.construct_tag(tag)
+        new_obj, loop_children = self.construct_tag(
+            tag,
+            self.working_masters[-1] if len(self.working_masters) > 0 else None
+        )
 
         if new_obj is not None and tag.name != 'root':
             new_obj.grid(**grid)
@@ -96,7 +98,7 @@ class Window(Tk):
     def construct_command(self, command_text):
         return lambda cmd=command_text: exec(cmd, {**self.showing_window_vars, **self.parent.env.globals})
 
-    def construct_tag(self, tag):
+    def construct_tag(self, tag, master):
         """ Construct a tag into a tkinter object """
         new_obj = None
         loop_children = True
@@ -117,19 +119,19 @@ class Window(Tk):
             self.configure(**tag.attrs)
 
         elif tag.name == 'frame':
-            new_obj = Frame(master=self.working_masters[-1], **tag.attrs)
+            new_obj = Frame(master=master, **tag.attrs)
 
         elif tag.name == 'label':
-            new_obj = Label(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+            new_obj = Label(master=master, text=tag.content, **tag.attrs)
 
         elif tag.name == 'button':
-            new_obj = Button(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+            new_obj = Button(master=master, text=tag.content, **tag.attrs)
 
         elif tag.name in ['entry', 'text']:
             if tag.name == 'entry':
-                new_obj = Entry(master=self.working_masters[-1], **tag.attrs)
+                new_obj = Entry(master=master, **tag.attrs)
             else:
-                new_obj = Text(master=self.working_masters[-1], **tag.attrs)
+                new_obj = Text(master=master, **tag.attrs)
             if tag.content is not None:
                 new_obj.val(tag.content)
 
@@ -157,14 +159,14 @@ class Window(Tk):
 
             load = load.resize((int(width), int(height)), Image.ANTIALIAS)
             render = ImageTk.PhotoImage(load)
-            new_obj = Label(self.working_masters[-1], image=render)
+            new_obj = Label(master, image=render)
             new_obj.image = render
 
         elif tag.name == 'checkbutton':
-            new_obj = Checkbutton(master=self.working_masters[-1], text=tag.content, **tag.attrs)
+            new_obj = Checkbutton(master=master, text=tag.content, **tag.attrs)
 
         elif tag.name == 'listbox':
-            new_obj = Listbox(master=self.working_masters[-1], **tag.attrs)
+            new_obj = Listbox(master=master, **tag.attrs)
 
             for t in tag.children:
                 if t.name == 'li':
@@ -192,6 +194,6 @@ class Window(Tk):
             loop_children = False
 
         elif tag.name == 'spinbox':
-            new_obj = Spinbox(self.working_masters[-1], **tag.attrs)
+            new_obj = Spinbox(master, **tag.attrs)
 
         return new_obj, loop_children
