@@ -44,12 +44,12 @@ class Window(Tk):
     def _loop_tag(self, tag):
         """ Loop over the XML tags and let the tags be generated and place them on their masters grid """
         # set style sheet attrs
-        if 'class' in tag.attrs:
+        if 'class' in tag.attrs and self.style_sheet is not None:
             class_name = tag.attrs['class']
             del tag.attrs['class']
             tag.attrs = {**tag.attrs, **self.style_sheet[f".{class_name}"]}
 
-        if 'id' in tag.attrs:
+        if 'id' in tag.attrs and self.style_sheet is not None:
             id_name = tag.attrs['id']
             del tag.attrs['id']
             tag.attrs = {**tag.attrs, **self.style_sheet[f"#{id_name}"]}
