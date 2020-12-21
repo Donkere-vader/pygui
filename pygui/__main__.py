@@ -21,13 +21,16 @@ class PyGui:
     def set_globals(self, **kwargs):
         self.env.globals.update(**kwargs)
 
+    def render_xml(self, xml_file):
+        template = self.env.get_template(xml_file)
+        xml_str = template.render(self.showing_window_vars)
+        return self.parser.loads(xml_str)
+
     def construct(self, _window, **kwargs):
         """ Show a specific window """
         self.showing_window_vars = kwargs
 
-        template = self.env.get_template(f'windows/{_window}.xml')
-        window_xml_str = template.render(self.showing_window_vars)
-        window_xml = self.parser.loads(window_xml_str)
+        window_xml = self.render_xml(f'windows/{_window}.xml')
         self._construct(window_xml)
 
         window = Window(self, window_xml, self.showing_window_vars)

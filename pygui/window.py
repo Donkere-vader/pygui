@@ -37,9 +37,12 @@ class Window(Tk):
             del self.xml.attrs['style']
             return json.load(open(f'static/{file_name}.json'))
 
-    def construct(self):
+    def construct(self, tag=None, master=None):
         """ Construct the current window """
-        self._loop_tag(self.xml)
+        if self.master is not None:
+            self.working_masters = [master]
+
+        self._loop_tag(self.xml if tag is None else tag)
 
     def _loop_tag(self, tag):
         """ Loop over the XML tags and let the tags be generated and place
@@ -110,6 +113,7 @@ class Window(Tk):
 
     def construct_tag(self, tag, master):
         """ Construct a tag into a tkinter object """
+        print(tag)
         new_obj = None
         loop_children = True
 
@@ -214,4 +218,16 @@ class Window(Tk):
 
     def reload(self, id):
         item = self.get_item(id)
-        print(item)
+
+        if item is None:
+            return
+
+        master = item.winfo_parent()
+        item.grid_forget()
+        item.destroy()
+        del self.items[id]
+
+        self.construct(
+            self.parent.render_xml(f"components/{id}.xml"),
+            master=master
+        )
