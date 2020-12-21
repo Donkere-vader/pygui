@@ -42,7 +42,8 @@ class Window(Tk):
         self._loop_tag(self.xml)
 
     def _loop_tag(self, tag):
-        """ Loop over the XML tags and let the tags be generated and place them on their masters grid """
+        """ Loop over the XML tags and let the tags be generated and place
+        them on their masters grid """
         # set style sheet attrs
         if 'class' in tag.attrs and self.style_sheet is not None:
             class_name = tag.attrs['class']
@@ -51,7 +52,10 @@ class Window(Tk):
 
         if 'id' in tag.attrs and self.style_sheet is not None:
             if f"#{tag.attrs['id']}" in self.style_sheet:
-                tag.attrs = {**tag.attrs, **self.style_sheet[f"#{tag.attrs['id']}"]}
+                tag.attrs = {
+                    **tag.attrs,
+                    **self.style_sheet[f"#{tag.attrs['id']}"]
+                }
 
         # get grid attrs
         grid = {
@@ -96,7 +100,13 @@ class Window(Tk):
             self.working_masters.remove(new_obj)
 
     def construct_command(self, command_text):
-        return lambda cmd=command_text: exec(cmd, {**self.showing_window_vars, **self.parent.env.globals})
+        return lambda cmd=command_text: exec(
+            cmd,
+            {
+                **self.showing_window_vars,
+                **self.parent.env.globals
+            }
+        )
 
     def construct_tag(self, tag, master):
         """ Construct a tag into a tkinter object """
@@ -106,7 +116,9 @@ class Window(Tk):
         if 'command' in tag.attrs:
             tag.attrs['command'] = self.construct_command(tag.attrs['command'])
         if 'image' in tag.attrs:
-            tag.attrs['image'] = ImageTk.PhotoImage(Image.open(tag.attrs['image']))
+            tag.attrs['image'] = ImageTk.PhotoImage(
+                Image.open(tag.attrs['image'])
+            )
 
         if tag.name == 'root':
             if 'title' in tag.attrs:
@@ -181,11 +193,13 @@ class Window(Tk):
                     for _t in t.children:
                         if _t.name == 'command':
                             if 'command' in _t.attrs:
-                                _t.attrs['command'] = self.construct_command(_t.attrs['command'])
+                                _t.attrs['command'] = self.construct_command(
+                                    _t.attrs['command']
+                                )
                             new_sub_menu.add_command(
                                 label=_t.content,
                                 **_t.attrs
-                                )
+                            )
                         if _t.name == 'seperator':
                             new_sub_menu.add_separator()
                     menubar.add_cascade(label=t.content, menu=new_sub_menu)
@@ -197,3 +211,7 @@ class Window(Tk):
             new_obj = Spinbox(master, **tag.attrs)
 
         return new_obj, loop_children
+
+    def reload(self, id):
+        item = self.get_item(id)
+        print(item)

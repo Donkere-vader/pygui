@@ -2,7 +2,6 @@ from .window import Window
 from XMLParser import XMLParser
 from jinja2 import Environment, PackageLoader, select_autoescape
 from tkinter import messagebox, filedialog
-import os
 
 
 class PyGui:
