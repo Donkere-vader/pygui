@@ -113,7 +113,6 @@ class Window(Tk):
 
     def construct_tag(self, tag, master):
         """ Construct a tag into a tkinter object """
-        print(tag)
         new_obj = None
         loop_children = True
 
