@@ -39,7 +39,7 @@ class Window(Tk):
 
     def construct(self, tag=None, master=None):
         """ Construct the current window """
-        if self.master is not None:
+        if master is not None:
             self.working_masters = [master]
 
         self._loop_tag(self.xml if tag is None else tag)
@@ -217,11 +217,10 @@ class Window(Tk):
 
     def reload(self, id):
         item = self.get_item(id)
-
         if item is None:
             return
 
-        master = item.winfo_parent()
+        master = item.master
         item.grid_forget()
         item.destroy()
         del self.items[id]
